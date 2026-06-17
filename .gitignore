@@ -1,0 +1,20 @@
+# Compiled Bicep artifacts (ARM JSON) are never committed; version.json is.
+*.json.tmp
+**/main.json
+**/*.test.json
+modules/**/examples/**/*.json
+modules/**/tests/**/*.json
+!**/version.json
+
+# Bicep restore cache
+.bicep/
+
+# PSRule output
+out/
+*.psrule.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
