@@ -1,0 +1,32 @@
+# PSRule for Azure configuration (static analysis, no Azure authentication).
+# See https://azure.github.io/PSRule.Rules.Azure/
+
+configuration:
+  # Expand Bicep source files to ARM during analysis (offline, no deployment).
+  AZURE_BICEP_FILE_EXPANSION: true
+  # Expand .bicepparam files (used by the multi-env example).
+  AZURE_BICEP_PARAMS_FILE_EXPANSION: true
+  # Allow time for first-run restore of public registry modules during expansion.
+  AZURE_BICEP_FILE_EXPANSION_TIMEOUT: 60
+
+input:
+  pathIgnore:
+    # Module entry points require parameters and cannot be expanded standalone.
+    # They are analyzed indirectly through their examples and tests below.
+    - "**/main.bicep"
+    - "**/*.md"
+    - "**/*.json"
+    # Re-include the parameter-complete examples and reference tests.
+    - "!**/examples/basic/main.bicep"
+    - "!**/examples/waf-aligned/main.bicep"
+    - "!**/tests/main.test.bicep"
+
+rule:
+  baseline: Azure.Default
+
+# Geo-replication of a Log Analytics workspace is a platform-level decision.
+# The waf-aligned example deploys a throwaway workspace only to demonstrate
+# diagnostics wiring, so replication is intentionally out of scope there.
+suppression:
+  Azure.Log.Replication:
+    - corp-prod-neu-law

@@ -1,0 +1,13 @@
+# markdownlint configuration (consumed by markdownlint-cli2)
+
+# MD013/line-length: prose is hand-wrapped by the author; do not enforce a
+# fixed line length.
+MD013: false
+
+# MD033/no-inline-html: allow occasional inline HTML where Markdown cannot
+# express the intent.
+MD033: false
+
+# MD024/no-duplicate-heading: sibling sections across modules reuse headings
+# such as "Parameters" and "When NOT to use"; allow duplicates.
+MD024: false
