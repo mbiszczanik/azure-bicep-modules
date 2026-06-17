@@ -1,0 +1,84 @@
+name: Quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  bicep:
+    name: Bicep build and lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Bicep CLI
+        run: |
+          curl -sLo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+          chmod +x bicep
+          sudo mv bicep /usr/local/bin/bicep
+          bicep --version
+
+      - name: Bicep build (compile) all main.bicep
+        run: |
+          set -euo pipefail
+          fail=0
+          while IFS= read -r f; do
+            echo "::group::build $f"
+            bicep build "$f" --stdout > /dev/null || fail=1
+            echo "::endgroup::"
+          done < <(find modules -name 'main.bicep')
+          exit $fail
+
+      - name: Bicep build-params all .bicepparam
+        run: |
+          set -euo pipefail
+          fail=0
+          while IFS= read -r f; do
+            echo "::group::build-params $f"
+            bicep build-params "$f" --stdout > /dev/null || fail=1
+            echo "::endgroup::"
+          done < <(find modules -name '*.bicepparam')
+          exit $fail
+
+      - name: Bicep lint all .bicep
+        run: |
+          set -euo pipefail
+          fail=0
+          while IFS= read -r f; do
+            bicep lint "$f" || fail=1
+          done < <(find modules -name '*.bicep')
+          exit $fail
+
+  psrule:
+    name: PSRule for Azure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Bicep CLI
+        run: |
+          curl -sLo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+          chmod +x bicep
+          sudo mv bicep /usr/local/bin/bicep
+          bicep --version
+
+      - name: Run PSRule for Azure (static analysis, no Azure auth)
+        uses: microsoft/ps-rule@v2.9.0
+        with:
+          modules: PSRule.Rules.Azure
+          option: ps-rule.yaml
+          inputType: repository
+
+  markdownlint:
+    name: Markdown lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Lint Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v23
+        with:
+          globs: "**/*.md"
