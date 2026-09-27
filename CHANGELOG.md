@@ -4,6 +4,17 @@ All notable changes to this repository are documented here. The format is based
 on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 aims to follow semantic versioning per module.
 
+## [Unreleased]
+
+### Changed
+
+- `ptn/secure-hub-spoke-avnm` README: refreshed the AVM baseline to September
+  2026. `avm/ptn/network/hub-networking` is no longer orphaned; the remaining
+  gaps were re-verified against its 0.5.0 release. Added a "Dependency risk"
+  section recording that `avm/res/network/network-manager` is now orphaned and
+  what triggers a re-check. The root README no longer calls hub-networking
+  orphaned.
+
 ## [0.1.0] - 2026-06-16
 
 ### Added

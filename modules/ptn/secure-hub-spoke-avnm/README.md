@@ -11,15 +11,30 @@ not reinvent any resource that AVM already provides; it composes them.
 
 ## Why this exists (the gap it fills)
 
-AVM ships `avm/ptn/network/hub-networking`, but as of June 2026 that module:
+AVM ships `avm/ptn/network/hub-networking`, but as of September 2026 (version
+0.5.0) that module:
 
-- wires connectivity with **classic 1:1 VNet peering**, not AVNM,
-- **does not provision NSGs** (it only attaches a pre-existing NSG by ID), and
-- is **orphaned** (security and bug fixes only).
+- wires connectivity with **classic 1:1 VNet peering**, not AVNM, and
+- **does not provision NSGs** (it only attaches a pre-existing NSG by ID).
+
+No AVM Bicep pattern module composes AVNM connectivity into hub-spoke, and
+there is no open proposal for one.
 
 This pattern fills exactly that gap: AVNM connectivity (one connectivity
 configuration governs every spoke, instead of N peering objects to manage) plus
 an enforced security admin baseline and organizational-default NSGs.
+
+## Dependency risk
+
+The differentiator, `avm/res/network/network-manager` (pinned at 0.6.1), is
+**orphaned** as of September 2026, together with all its child modules
+([Azure/Azure-Verified-Modules#2923](https://github.com/Azure/Azure-Verified-Modules/issues/2923)).
+It still receives security and bug fixes, but no new features. Re-check this
+dependency when any of the following happens:
+
+- the module gets a new owner (adoption),
+- the module is deprecated, or
+- this pattern needs a feature or fix only available beyond 0.6.1.
 
 ## When NOT to use this
 
