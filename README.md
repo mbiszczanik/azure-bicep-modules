@@ -22,8 +22,8 @@ This is the most important section. Use the decision below honestly.
 | You want AVM resources but with enforced organizational defaults (RBAC-only Key Vault, mandatory tags, deny-by-default networking) | **A wrapper here**, or raw AVM if its defaults already match your policy. |
 
 The flagship `secure-hub-spoke-avnm` is a worked example of this judgment: AVM's
-`avm/ptn/network/hub-networking` exists, but it uses classic VNet peering, does
-not provision NSGs, and is currently orphaned. This library adds the
+`avm/ptn/network/hub-networking` exists, but it uses classic VNet peering and
+does not provision NSGs. This library adds the
 Azure Virtual Network Manager (AVNM) based alternative with an enforced security
 baseline. If classic peering is enough for you, use the AVM module instead. That
 honesty is the point.
