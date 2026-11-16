@@ -8,6 +8,7 @@ aims to follow semantic versioning per module.
 
 ### Changed
 
+- Repository tooling: `mise.toml` pins the Bicep CLI (0.49.2) and defines `check` and `check:fast`; the CI Bicep job runs `mise run check` through `tools/check-bicep.sh` instead of installing the latest CLI. Added `AGENTS.md`.
 - `ptn/secure-hub-spoke-avnm` README: refreshed the AVM baseline to September
   2026. `avm/ptn/network/hub-networking` is no longer orphaned; the remaining
   gaps were re-verified against its 0.5.0 release. Added a "Dependency risk"

@@ -12,46 +12,19 @@ jobs:
   bicep:
     name: Bicep build and lint
     runs-on: ubuntu-latest
+    env:
+      MISE_TRUSTED_CONFIG_PATHS: ${{ github.workspace }}
     steps:
       - uses: actions/checkout@v7
 
-      - name: Install Bicep CLI
-        run: |
-          curl -sLo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
-          chmod +x bicep
-          sudo mv bicep /usr/local/bin/bicep
-          bicep --version
+      - uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
+        with:
+          version: 2026.11.2
+          cache: false
 
-      - name: Bicep build (compile) all main.bicep
-        run: |
-          set -euo pipefail
-          fail=0
-          while IFS= read -r f; do
-            echo "::group::build $f"
-            bicep build "$f" --stdout > /dev/null || fail=1
-            echo "::endgroup::"
-          done < <(find modules -name 'main.bicep')
-          exit $fail
-
-      - name: Bicep build-params all .bicepparam
-        run: |
-          set -euo pipefail
-          fail=0
-          while IFS= read -r f; do
-            echo "::group::build-params $f"
-            bicep build-params "$f" --stdout > /dev/null || fail=1
-            echo "::endgroup::"
-          done < <(find modules -name '*.bicepparam')
-          exit $fail
-
-      - name: Bicep lint all .bicep
-        run: |
-          set -euo pipefail
-          fail=0
-          while IFS= read -r f; do
-            bicep lint "$f" || fail=1
-          done < <(find modules -name '*.bicep')
-          exit $fail
+      # Bicep CLI version is pinned in mise.toml; build, build-params and lint run in tools/check-bicep.sh.
+      - name: Offline check
+        run: mise run check
 
   psrule:
     name: PSRule for Azure

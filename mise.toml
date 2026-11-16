@@ -1,0 +1,20 @@
+# check = offline lane (CI runs it); check:fast = seconds, no credentials, no Azure call.
+# PSRule and Markdown lint stay separate CI jobs (they need PowerShell and Node).
+
+# The aqua build of Bicep does not run on the Ubuntu runner (glibc loader missing), so the
+# release assets are named per platform.
+[tools."github:Azure/bicep"]
+version = "0.49.2"
+bin = "bicep"
+
+[tools."github:Azure/bicep".platforms]
+linux-x64 = { asset_pattern = "bicep-linux-x64" }
+windows-x64 = { asset_pattern = "bicep-win-x64.exe" }
+
+[tasks.check]
+description = "Bicep build, build-params and lint for every module, offline"
+run = "bash tools/check-bicep.sh"
+
+[tasks."check:fast"]
+description = "Bicep build and lint of the two utility modules, no credentials, no Azure call"
+run = "bash tools/check-bicep.sh fast"
