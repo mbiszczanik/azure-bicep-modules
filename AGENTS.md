@@ -19,3 +19,4 @@ Public, AVM-first Bicep library: pattern modules (`modules/ptn`), wrappers (`mod
 - A module change bumps its `version.json` and adds a `CHANGELOG.md` entry.
 - Work goes through a branch and a pull request, never a commit to `main`. A claim that something was tested carries its command, exit code and date.
 - Documentation is in English, without em dashes or promotional wording.
+- Never present work the author did not author as the author's own.
